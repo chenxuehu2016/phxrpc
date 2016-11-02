@@ -3,11 +3,14 @@ include ../phxrpc.mk
 
 COMM_OBJS = syntax_tree.o proto_utils.o name_render.o code_utils.o
 
-TARGETS = phxrpc_pb2service phxrpc_pb2client phxrpc_pb2tool phxrpc_pb2server
+TARGETS = phxrpc_xml2proto phxrpc_pb2service phxrpc_pb2client phxrpc_pb2tool phxrpc_pb2server
 
 TEST_TARGETS = test_proto_utils
 
 all: $(TARGETS) $(TEST_TARGETS)
+
+phxrpc_xml2proto: phxrpc_xml2proto.o
+	$(LINKER) $^ $(LDFLAGS) -o $@
 
 phxrpc_pb2service: $(COMM_OBJS) service_code_render.o phxrpc_pb2service.o
 	$(LINKER) $^ $(LDFLAGS) -o $@

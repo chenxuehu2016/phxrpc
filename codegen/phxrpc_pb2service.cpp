@@ -127,6 +127,40 @@ void Proto2Service(const char * program, const char * pb_file, const char * dir_
         }
     }
 
+    // [xx]serverhandler.h
+    {
+        name_render.GetServerHandlerFileName(syntax_tree.GetName(), tmp, sizeof(tmp));
+        snprintf(filename, sizeof(filename), "%s/%s.h", dir_path, tmp);
+
+        if (0 != access(filename, F_OK)) {
+            FILE * fp = fopen(filename, "w");
+            assert(NULL != fp);
+            codeRender.GenerateServerHandlerHpp(&syntax_tree, fp);
+            fclose(fp);
+
+            printf("\n%s: Build %s file ... done\n", program, filename);
+        } else {
+            printf("\n%s: %s is exist, skip\n", program, filename);
+        }
+    }
+
+    // [xx]serverhandler.cpp
+    {
+        name_render.GetServerHandlerFileName(syntax_tree.GetName(), tmp, sizeof(tmp));
+        snprintf(filename, sizeof(filename), "%s/%s.cpp", dir_path, tmp);
+
+        if (0 != access(filename, F_OK)) {
+            FILE * fp = fopen(filename, "w");
+            assert(NULL != fp);
+            codeRender.GenerateServerHandlerCpp(&syntax_tree, fp);
+            fclose(fp);
+
+            printf("\n%s: Build %s file ... done\n", program, filename);
+        } else {
+            printf("\n%s: %s is exist, skip\n", program, filename);
+        }
+    }
+
     // [xx]dispatcher.h
     {
         name_render.GetDispatcherFileName(syntax_tree.GetName(), tmp, sizeof(tmp));

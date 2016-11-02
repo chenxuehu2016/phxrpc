@@ -130,12 +130,15 @@ void ServerCodeRender::GenerateServerMainCpp(SyntaxTree * stree, FILE * write) {
 
     char dispatcher_calss[128] = { 0 }, dispatcher_file[128] = { 0 };
     char service_impl_class[128] = { 0 }, service_impl_file[128] = { 0 };
+    char server_handler_class[128] = { 0 }, server_handler_file[128] = { 0 };
     char server_config_class[128] = { 0 }, server_config_file[128] = { 0 };
 
     name_render_.GetDispatcherClasname(stree->GetName(), dispatcher_calss, sizeof(dispatcher_calss));
     name_render_.GetDispatcherFileName(stree->GetName(), dispatcher_file, sizeof(dispatcher_file));
     name_render_.GetServiceImplClasname(stree->GetName(), service_impl_class, sizeof(service_impl_class));
     name_render_.GetServiceImplFileName(stree->GetName(), service_impl_file, sizeof(service_impl_file));
+    name_render_.GetServerHandlerClasname(stree->GetName(), server_handler_class, sizeof(server_handler_class));
+    name_render_.GetServerHandlerFileName(stree->GetName(), server_handler_file, sizeof(server_handler_file));
     name_render_.GetServerConfigClasname(stree->GetName(), server_config_class, sizeof(server_config_class));
     name_render_.GetServerConfigFileName(stree->GetName(), server_config_file, sizeof(server_config_file));
 
@@ -146,6 +149,8 @@ void ServerCodeRender::GenerateServerMainCpp(SyntaxTree * stree, FILE * write) {
     StrReplaceAll(&content, "$DispatcherClass$", dispatcher_calss);
     StrReplaceAll(&content, "$ServiceImplFile$", service_impl_file);
     StrReplaceAll(&content, "$ServiceImplClass$", service_impl_class);
+    StrReplaceAll(&content, "$ServerHandlerFile$", server_handler_file);
+    StrReplaceAll(&content, "$ServerHandlerClass$", server_handler_class);
     StrReplaceAll(&content, "$ServerConfigFile$", server_config_file);
     StrReplaceAll(&content, "$ServerConfigClass$", server_config_class);
 
@@ -185,7 +190,7 @@ void ServerCodeRender::GenerateMakefile(SyntaxTree * stree, const std::string & 
     fprintf(write, "#\n");
     fprintf(write, "\n");
 
-    char dispatcher_file[128] = { 0 }, service_file[128] = { 0 }, service_impl_file[128] = { 0 };
+    char dispatcher_file[128] = { 0 }, service_file[128] = { 0 }, service_impl_file[128] = { 0 }, server_handler_file[128] = { 0 };
     char server_config_file[128] = { 0 }, server_main_file[128] = { 0 };
     char message_file[128] = { 0 }, stub_file[128] = { 0 }, client_file[128] = { 0 };
     char tool_file[128] = { 0 }, tool_impl_file[128] = { 0 }, tool_main_file[128] = { 0 };
@@ -193,6 +198,7 @@ void ServerCodeRender::GenerateMakefile(SyntaxTree * stree, const std::string & 
     name_render_.GetDispatcherFileName(stree->GetName(), dispatcher_file, sizeof(dispatcher_file));
     name_render_.GetServiceImplFileName(stree->GetName(), service_impl_file, sizeof(service_impl_file));
     name_render_.GetServiceFileName(stree->GetName(), service_file, sizeof(service_file));
+    name_render_.GetServerHandlerFileName(stree->GetName(), server_handler_file, sizeof(server_handler_file));
 
     name_render_.GetServerConfigFileName(stree->GetName(), server_config_file, sizeof(server_config_file));
     name_render_.GetServerMainFileName(stree->GetName(), server_main_file, sizeof(server_main_file));
@@ -211,6 +217,8 @@ void ServerCodeRender::GenerateMakefile(SyntaxTree * stree, const std::string & 
     StrReplaceAll(&content, "$DispatcherFile$", dispatcher_file);
     StrReplaceAll(&content, "$ServiceFile$", service_file);
     StrReplaceAll(&content, "$ServiceImplFile$", service_impl_file);
+    StrReplaceAll(&content, "$ServerHandlerFile$", server_handler_file);
+
 
     StrReplaceAll(&content, "$ServerConfigFile$", server_config_file);
     StrReplaceAll(&content, "$ServerMainFile$", server_main_file);

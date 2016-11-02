@@ -10,6 +10,7 @@ OS := $(shell uname)
 
 PROTOBUF_ROOT=$(PHXRPC_ROOT)/third_party/protobuf
 BOOST_ROOT=$(PHXRPC_ROOT)/third_party/boost
+TINYXML2_ROOT=$(PHXRPC_ROOT)/third_party/tinyxml2
 
 PLUGIN_BOOST_LDFLAGS = -Wl,--whole-archive -L$(PHXRPC_ROOT)/lib/ -lphxrpc_plugin_boost \
 		-Wl,--no-whole-archive -L$(BOOST_ROOT)/lib/ -lboost_context
@@ -34,9 +35,10 @@ RM = /bin/rm -f
 
 CFLAGS = -std=c++11 -Wall -D_REENTRANT -D_GNU_SOURCE -D_XOPEN_SOURCE -fPIC -m64 $(OPT) \
 		 -I$(PROTOBUF_ROOT)/include \
+		 -I$(TINYXML2_ROOT) \
 		 -I$(PHXRPC_ROOT) \
 
-LDFLAGS = -L$(PROTOBUF_ROOT)/lib/ $(PROTOBUF_ROOT)/lib/libprotobuf.a \
+LDFLAGS = -L$(PROTOBUF_ROOT)/lib/ $(PROTOBUF_ROOT)/lib/libprotobuf.a ${TINYXML2_ROOT}/libtinyxml2.a \
 		  -lstdc++ -lpthread -lm
 
 PBFLAGS = -I $(PROTOBUF_ROOT)/include -I $(PHXRPC_ROOT)

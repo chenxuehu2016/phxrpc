@@ -58,6 +58,42 @@ const char * NameRender::GetMessageClasname(const char * type, char * name, int 
     return name;
 }
 
+const char * NameRender::GetFuncCppDeclaration(const char *type, char * name, int size) {
+    // 参考 google/protobuf/wrappers.proto
+    //https://developers.google.com/protocol-buffers/docs/proto#scalar
+    char type_name[128] = { 0 };
+    std::string result;
+
+    GetMessageClasname(type, type_name, sizeof(type_name));
+    if (0 == strcmp("google::protobuf::Empty", type_name)) {
+        // nothing
+    } else if (0 == strcmp("google::protobuf::DoubleValue", type_name)) {
+        result.append("double");
+    } else if (0 == strcmp("google::protobuf::FloatValue", type_name)) {
+        result.append("float");
+    } else if (0 == strcmp("google::protobuf::Int64Value", type_name)) {
+        result.append("int64");
+    } else if (0 == strcmp("google::protobuf::UInt64Value", type_name)) {
+        result.append("uint64");
+    } else if (0 == strcmp("google::protobuf::Int32Value", type_name)) {
+        result.append("int32");
+    } else if (0 == strcmp("google::protobuf::UInt32Value", type_name)) {
+        result.append("uint32");
+    } else if (0 == strcmp("google::protobuf::BoolValue", type_name)) {
+        result.append("bool");
+    } else if (0 == strcmp("google::protobuf::StringValue", type_name)) {
+        result.append("std::string");
+    } else if (0 == strcmp("google::protobuf::BytesValue", type_name)) {
+        result.append("std::string");
+    } else {
+        result.append(type);
+    }
+
+    snprintf(name, size, "%s", result.c_str());
+
+    return name;
+}
+
 const char * NameRender::GetMessageFileName(const char *name, char * dest, int size) {
     snprintf(dest, size, "%s%s", prefix_, name);
 
@@ -237,6 +273,20 @@ const char * NameRender::GetServiceImplClasname(const char * name, char * dest, 
 
 const char * NameRender::GetServiceImplFileName(const char * name, char * dest, int size) {
     snprintf(dest, size, "%s%c%s_service_impl", prefix_, toupper(*name), name + 1);
+
+    ToLower(dest);
+
+    return dest;
+}
+
+const char * NameRender::GetServerHandlerClasname(const char * name, char * dest, int size) {
+    snprintf(dest, size, "%s%c%sServerHandler", prefix_, toupper(*name), name + 1);
+
+    return dest;
+}
+
+const char * NameRender::GetServerHandlerFileName(const char * name, char * dest, int size) {
+    snprintf(dest, size, "%s%c%s_server_handler", prefix_, toupper(*name), name + 1);
 
     ToLower(dest);
 

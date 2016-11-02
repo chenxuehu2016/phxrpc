@@ -96,6 +96,7 @@ int main( int argc, char * argv[] ) {
 
     ServiceArgs_t service_args;
     service_args.config = &config;
+    service_args.svr_handler_ = new $ServerHandlerClass$();
 
     phxrpc::HshaServer server( config.GetHshaServerConfig(), HttpDispatch, &service_args );
     server.RunForever();
@@ -203,6 +204,7 @@ LDFLAGS := -L$(PHXRPC_ROOT)/lib -lphxrpc $(LDFLAGS)
 #LDFLAGS := $(PLUGIN_BOOST_LDFLAGS) $(LDFLAGS)
 
 SVR_OBJS = $MessageFile$.o \
+           $ServerHandlerFile$.o \
 		   $ServiceImplFile$.o \
 		   $ServiceFile$.o \
 		   $DispatcherFile$.o \
@@ -251,6 +253,9 @@ $ServiceImplFile$.cpp: $ServiceFile$.h
 $ServiceImplFile$.o: $ServiceFile$.h
 $DispatcherFile$.cpp: $ServiceFile$.h
 $DispatcherFile$.o: $ServiceFile$.h
+
+$ServerHandlerFile$.cpp : $ServiceFile$.h
+$ServerHandlerFile$.o : $ServiceFile$.h
 
 $ServiceFile$.h: $ProtoFile$
 	$(PHXRPC_ROOT)/codegen/phxrpc_pb2service $(PBFLAGS) -f $^ -d .

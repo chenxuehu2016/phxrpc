@@ -19,10 +19,20 @@ if [ ! -f protobuf/bin/protoc ]; then
 	make install
 
 	cd ../
+
 fi
 
-cd ..
+if [ ! -f tinyxml2/libtinyxml2.a ]; then
 
-make
+	if [ ! -f tinyxml2.tar.gz ]; then
+		wget https://github.com/leethomason/tinyxml2/archive/4.0.1.tar.gz -O ./tinyxml2-4.0.1.tar.gz
+	fi
+	tar zxvf tinyxml2-4.0.1.tar.gz
+	cd tinyxml2-4.0.1
+	make 
+	cd ..
+	ln -s tinyxml2-4.0.1 tinyxml2
+fi
+
 
 exit $?

@@ -42,6 +42,10 @@ class NameRender {
 
     //================================================================
 
+    virtual const char * GetFuncCppDeclaration(const char * type, char * name, int size);
+
+    //================================================================
+
     virtual const char * GetStubClasname(const char * name, char *dest, int size);
     virtual const char * GetStubFileName(const char *name, char * dest, int size);
 
@@ -63,6 +67,9 @@ class NameRender {
 
     virtual const char * GetDispatcherClasname(const char * name, char * dest, int size);
     virtual const char * GetDispatcherFileName(const char * name, char * dest, int size);
+
+    virtual const char * GetServerHandlerClasname(const char * name, char * dest, int size);
+    virtual const char * GetServerHandlerFileName(const char * name, char * dest, int size);
 
     //================================================================
 

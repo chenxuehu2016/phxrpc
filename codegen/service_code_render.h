@@ -44,6 +44,10 @@ class ServiceCodeRender {
 
     virtual void GenerateServiceImplCpp(SyntaxTree * stree, FILE * write);
 
+    virtual void GenerateServerHandlerHpp(SyntaxTree * stree, FILE * write);
+
+    virtual void GenerateServerHandlerCpp(SyntaxTree * stree, FILE * write);
+
     virtual void GenerateDispatcherHpp(SyntaxTree * stree, FILE * write);
 
     virtual void GenerateDispatcherCpp(SyntaxTree * stree, FILE * write);
@@ -52,6 +56,10 @@ class ServiceCodeRender {
 
     virtual void GetServiceFuncDeclaration(SyntaxTree * stree, SyntaxFunc * func, int is_header, int is_impl,
                                            int need_param_name, std::string * result);
+
+    virtual void GetServerHandlerFuncDeclaration(SyntaxTree *stree, SyntaxFunc *func, int is_header, int need_param_name, std::string *result);
+
+    virtual void GetServiceFuncInvokeHandler(SyntaxTree * stree, SyntaxFunc * func, std::string * result);
 
     virtual void GenerateDispatcherFunc(SyntaxTree * stree, SyntaxFunc * func, FILE * write);
 
