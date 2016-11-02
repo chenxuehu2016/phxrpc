@@ -2,7 +2,7 @@
 
 **PhxRPC是微信后台团队推出的一个非常简洁小巧的RPC框架，编译生成的库只有450K。**
 
-# 更多文档请[官方文档(https://github.com/tencent-wechat/phxrpc/blob/master/README.md)
+**更多文档[官方文档(https://github.com/tencent-wechat/phxrpc/blob/master/README.md)**
 
 # 为什么要扩展phxrpc?
 根据[微信技术总监周颢：一亿用户背后架构秘密](http://tech.qq.com/a/20120515/000224.htm)
