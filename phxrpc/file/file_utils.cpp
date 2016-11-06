@@ -68,4 +68,32 @@ bool FileUtils::ReadFile(const char * path, std::string * content) {
     return ret;
 }
 
+bool FileUtils::WriteFile(const char * path, std::string * content) {
+    
+    char newpath[ 1024 ] = { 0 };
+    if( '~' == path[0] ) {
+        snprintf( newpath, sizeof( newpath ), "%s%s", getenv( "HOME" ), path + 1 );
+    } else {
+        snprintf( newpath, sizeof( newpath ), "%s", path );
+    }
+
+    bool ret = false;
+
+    //int fd = ::open(newpath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+    int fd = open(newpath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+    if (fd >= 0) {
+        ssize_t size = content->size();
+        if (write(fd, (char*) content->data(), content->size()) == size) {
+            ret = true;
+        } else {
+            phxrpc::log(LOG_ERR, "WARN: write( ..., %llu ) fail, errno %d, %s",
+                        (unsigned long long)content->size(), errno, strerror(errno));
+        }
+        close(fd);
+    } else {
+        phxrpc::log(LOG_ERR, "WARN: open %s fail, errno %d, %s", newpath, errno, strerror(errno));
+    }
+    return ret;
+}
+
 }

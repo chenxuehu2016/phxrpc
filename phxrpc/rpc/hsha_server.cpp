@@ -678,7 +678,7 @@ HshaServer :: HshaServer(
         Dispatch_t dispatch, 
         void * args) : 
     config_(&config),
-    hsha_server_monitor_(MonitorFactory::GetFactory()->CreateServerMonitor(config.GetPackageName())),
+    hsha_server_monitor_(MonitorFactory::GetFactory()->CreateServerMonitor(config.GetPackageName(), config.GetMonitorDir())),
     hsha_server_stat_(&config, hsha_server_monitor_), 
     hsha_server_qos_(&config, &hsha_server_stat_), 
     hsha_server_acceptor_(this) {

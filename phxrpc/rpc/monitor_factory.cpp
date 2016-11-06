@@ -46,12 +46,12 @@ MonitorFactory * MonitorFactory :: GetFactory() {
     return g_monitor_factory_;
 }
 
-ClientMonitorPtr MonitorFactory :: CreateClientMonitor( const char * package_name ) {
-    return ClientMonitorPtr( new ClientMonitor() );
+ClientMonitorPtr MonitorFactory :: CreateClientMonitor( const char * package_name) {
+    return ClientMonitorPtr( new ClientMonitor(package_name) );
 }
 
-ServerMonitorPtr MonitorFactory :: CreateServerMonitor( const char * package_name ) {
-    return ServerMonitorPtr( new ServerMonitor() );
+ServerMonitorPtr MonitorFactory :: CreateServerMonitor( const char * package_name, const char* log_dir ) {
+    return ServerMonitorPtr( new ServerMonitor(package_name, log_dir) );
 }
 
 }

@@ -28,7 +28,8 @@ namespace phxrpc {
 class FileUtils {
 public:
     static bool ReadFile(const char * path, std::string * content);
-
+    
+    static bool WriteFile(const char * path, std::string * content);
 private:
     FileUtils();
     ~FileUtils();

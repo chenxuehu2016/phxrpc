@@ -23,6 +23,7 @@ See the AUTHORS file for names of contributors.
 
 #include <stdint.h>
 #include <memory>
+#include <pthread.h>
 #include <sys/types.h>
 
 namespace phxrpc {
@@ -30,7 +31,8 @@ namespace phxrpc {
 
 class ClientMonitor {
  public:
-    ClientMonitor();
+    //ClientMonitor();
+    ClientMonitor(const char *string);
 
     virtual ~ClientMonitor();
 
@@ -53,6 +55,9 @@ class ClientMonitor {
     virtual void GetEndpointFail();
 
     virtual void ClientCall( int cmd, const char * method_name );
+
+private:
+    const char *package_name;
 };
 
 typedef std::shared_ptr<ClientMonitor> ClientMonitorPtr;

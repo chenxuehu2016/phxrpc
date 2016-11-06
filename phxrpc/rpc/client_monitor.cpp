@@ -28,9 +28,12 @@ See the AUTHORS file for names of contributors.
 namespace phxrpc {
 
 //ClientMonitor begin
-ClientMonitor :: ClientMonitor() {
-}
+//ClientMonitor :: ClientMonitor() {
+//}
 
+ClientMonitor::ClientMonitor(const char *string) {
+
+}
 ClientMonitor :: ~ClientMonitor() {
 }
 
@@ -63,6 +66,8 @@ void ClientMonitor :: GetEndpointFail() {
 
 void ClientMonitor :: ClientCall( int cmdid, const char * method_name ) {
 }
+
+
 //ClientMonitor end
 
 }

@@ -49,6 +49,7 @@ bool ServerConfig::Read(const char * config_file) {
     succ &= config.ReadItem("Server", "PackageName", package_name_, sizeof(package_name_));
     config.ReadItem("Server", "MaxThreads", &max_threads_, 20);
     config.ReadItem("Log", "LogDir", log_dir_, sizeof(log_dir_), "~/log");
+    config.ReadItem("Monitor", "MonitorDir", monitor_dir_, sizeof(monitor_dir_), "/run/system");
     config.ReadItem("Log", "LogLevel", &log_level_, LOG_ERR);
     config.ReadItem("ServerTimeout", "SocketTimeoutMS", &socket_timeout_ms_, 5000);
 
@@ -107,6 +108,11 @@ const char * ServerConfig :: GetPackageName() const {
 const char * ServerConfig :: GetLogDir() const
 {
     return log_dir_;
+}
+
+const char * ServerConfig ::GetMonitorDir() const
+{
+    return monitor_dir_;
 }
 
 void ServerConfig :: SetLogLevel( int log_level )

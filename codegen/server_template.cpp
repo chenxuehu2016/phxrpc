@@ -189,6 +189,8 @@ LogLevel = 3
 [ServerTimeout]
 SocketTimeoutMS = 5000
 
+[Monitor]
+MonitorDir = /run/system
 )";
 
 //////////////////////////////////////////////////////////////////////

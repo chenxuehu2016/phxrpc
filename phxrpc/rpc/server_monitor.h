@@ -24,12 +24,16 @@ See the AUTHORS file for names of contributors.
 #include <stdint.h>
 #include <memory>
 #include <sys/types.h>
+#include <map>
+// #include <pthread.h>
 
 namespace phxrpc {
 
 class ServerMonitor {
  public:
-    ServerMonitor();
+    //ServerMonitor();
+
+    ServerMonitor(const char *package_name, const char* log_dir );
 
     virtual ~ServerMonitor();
 
@@ -56,7 +60,7 @@ class ServerMonitor {
     virtual void QueueDelay( uint64_t cost_ms );
 
     virtual void FastRejectAfterAccept( int count );
-    
+
     virtual void FastRejectAfterRead( int count );
 
     virtual void WrokerInQueueTimeout( int count );
@@ -66,6 +70,47 @@ class ServerMonitor {
     virtual void WaitInOutQueue( uint64_t cost_ms );
 
     virtual void SvrCall( int cmdid, const char * method_name, int count );
+
+private:
+    const char *package_name;
+
+    const char *log_dir;
+
+    void writeToFile();
+
+    int accept;
+
+    int accept_fail;
+
+    int request_count;
+
+    int response_count;
+
+    size_t send_bytes;
+
+    size_t recv_bytes;
+
+    size_t request_cost;
+
+    int read_error;
+
+    int send_error;
+
+    int out_of_queue;
+
+    uint64_t queue_delay;
+
+    int fast_reject_accept;
+
+    int fast_reject_read;
+
+    int wroker_queue_timeout;
+
+    int waitin_queue;
+
+    int waitout_queue;
+
+    std::map<std::string, int> svr_call;
 };
 
 typedef std::shared_ptr<ServerMonitor> ServerMonitorPtr;

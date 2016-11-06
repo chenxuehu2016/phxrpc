@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package phxbinlogsvr;
+
+message BinLogBuffer
+{
+    string oldgtid = 1;
+    string newgtid = 2;
+    bytes eventbuffer = 3;
+};
+
+message BinLogResp
+{
+    repeated int32 section = 1;
+    bytes respbuffer = 2;
+};
+
+message MasterInfo
+{
+    string ip = 1;
+    uint32 expire_time = 2;
+    uint32 version = 3;
+    uint32 update_time = 4;
+};
+
+message ExportIPInfo
+{
+    string ip = 1;
+    uint32 port = 2;
+};
+
+message HeartBeatInfo
+{
+    uint32 flag = 1;
+};
+
+message ChangeMemberInfo
+{
+    string ip = 1;
+};
+
+message MySqlUserModefiedInfo
+{
+    string now_admin_username = 1;
+    string now_admin_pwd = 2;
+    string new_username = 3;
+    string new_pwd = 4;
+};
+
+message MemberList
+{
+    repeated string ip_list = 1;
+    uint32 port = 2;
+};
+
+enum Cmd
+{
+    send_binlog = 0;
+    get_lastsend_gtid_fromg_global = 2;
+    get_masterinfo_fromg_global = 4;
+};
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+import "phxrpc/rpc/phxrpc.proto";
+
+service phxbinlog
+{
+    rpc SendBinLog( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 1;
+        option( phxrpc.OptString ) = "e:";
+        option( phxrpc.Usage ) = "-e <emtpy>";
+    }
+
+    rpc GetMasterInfoFromGlobal( google.protobuf.Empty ) returns( google.protobuf.BytesValue ) {
+        option( phxrpc.CmdID ) = 2;
+        option( phxrpc.OptString ) = "h:p:";
+        option( phxrpc.Usage ) = "-h <host> -p <port>";
+    }
+
+    rpc GetMasterInfoFromLocal( google.protobuf.Empty ) returns( google.protobuf.BytesValue ) {
+        option( phxrpc.CmdID ) = 3;
+        option( phxrpc.OptString ) = "e:";
+        option( phxrpc.Usage ) = "-e <emtpy>";
+    }
+
+    rpc GetLastSendGtidFromGlobal( google.protobuf.BytesValue ) returns( google.protobuf.BytesValue ) {
+        option( phxrpc.CmdID ) = 4;
+        option( phxrpc.OptString ) = "h:p:u:";
+        option( phxrpc.Usage ) = "-h <host> -p <port> -u <gtid>";
+    }
+
+    rpc GetLastSendGtidFromLocal( google.protobuf.BytesValue ) returns( google.protobuf.BytesValue ) {
+        option( phxrpc.CmdID ) = 5;
+        option( phxrpc.OptString ) = "e:";
+        option( phxrpc.Usage ) = "-e <emtpy>";
+    }
+
+    rpc SetExportIP( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 6;
+        option( phxrpc.OptString ) = "h:p:";
+        option( phxrpc.Usage ) = "-h <host> -p <port>";
+    }
+
+    rpc HeartBeat( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 7;
+        option( phxrpc.OptString ) = "e:";
+        option( phxrpc.Usage ) = "-e <emtpy>";
+    }
+
+    rpc AddMember( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 8;
+        option( phxrpc.OptString ) = "h:p:m:";
+        option( phxrpc.Usage ) = "-h <host> -p <port> -m <member ip>";
+    }
+
+    rpc RemoveMember( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 9;
+        option( phxrpc.OptString ) = "h:p:m:";
+        option( phxrpc.Usage ) = "-h <host> -p <port> -m <member ip>";
+    }
+
+    rpc SetMySqlAdminInfo( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 10;
+        option( phxrpc.OptString ) = "h:p:u:d:U:D:";
+        option( phxrpc.Usage ) = "-h <host> -p <port> -u <admin username> -d <admin pwd> -U <new admin username> -D <new admin pwd>";
+    }
+
+    rpc SetMySqlReplicaInfo( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 11;
+        option( phxrpc.OptString ) = "h:p:u:d:U:D:";
+        option( phxrpc.Usage ) = "-h <host> -p <port> -u <admin username> -d <admin pwd> -U <new replica username> -D <new replica pwd>";
+    }
+
+    rpc GetMemberList( google.protobuf.Empty ) returns( google.protobuf.BytesValue ) {
+        option( phxrpc.CmdID ) = 12;
+        option( phxrpc.OptString ) = "h:p:";
+        option( phxrpc.Usage ) = "-h <host> -p <port>";
+    }
+
+    rpc InitBinlogSvrMaster( google.protobuf.BytesValue ) returns( google.protobuf.Empty ) {
+        option( phxrpc.CmdID ) = 13;
+        option( phxrpc.OptString ) = "h:p:";
+        option( phxrpc.Usage ) = "-h <ip1,ip2,ip3(ip1 is master, others are slaves)> -p <port>";
+    }
+
+}
+

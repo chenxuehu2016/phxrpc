@@ -9,3 +9,6 @@
 third_party/*
 sbin/*
 #sample/*
+.vscode/*
+.idea/*
+CMakeLists.txt

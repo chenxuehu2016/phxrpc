@@ -22,7 +22,8 @@ ifeq ($(debug),y)
 	OPT = -g2
 else
 # (2) Production
-	OPT = -O2
+#	OPT = -O2
+OPT = -g2
 endif
 
 CC = gcc
