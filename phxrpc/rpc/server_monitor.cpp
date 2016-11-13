@@ -32,29 +32,30 @@ namespace phxrpc {
 //ServerMonitor begin
 ServerMonitor::ServerMonitor(const char *package_name, const char* log_dir ) :
     package_name(package_name), log_dir(log_dir) {
-
+    //accept
     this->accept = 0;
     this->accept_fail = 0;
-    this->request_count = 0;
-    this->response_count = 0;
-    this->send_bytes = 0;
-    this->recv_bytes = 0;
+    this->fast_reject_accept = 0;
 
-    this->request_cost = 0;
+    //io
     this->read_error = 0;
     this->send_error = 0;
     this->out_of_queue = 0;
-
+    this->fast_reject_after_read = 0;
     this->queue_delay = 0;
-    this->fast_reject_accept = 0;
-    this->fast_reject_read = 0;
+    this->send_bytes = 0;
+    this->recv_bytes = 0;
+    this->waitin_queue_cost = 0;
+    this->waitout_queue_cost = 0;
 
-    this->wroker_queue_timeout = 0;
-    this->waitin_queue = 0;
-    this->waitout_queue = 0;
+    //worker
+    this->request_qps = 0;
+    this->response_qps = 0;
+    this->request_cost_ms = 0;
+    this->wroker_queue_timeout_count = 0;
 
     this->svr_call = {{}};
-}
+
 
 ServerMonitor :: ~ServerMonitor() {
 }
@@ -62,34 +63,36 @@ ServerMonitor :: ~ServerMonitor() {
 void ServerMonitor :: writeToFile() {
     std::ostringstream content;
 
+    //accept
     content << "accept = " << accept <<"\n";
     content << "accept_fail = " << accept_fail <<"\n";
-    content << "request_count = " << request_count <<"\n";
-    content << "response_count = " << response_count <<"\n";
+    content << "fast_reject_accept = " << fast_reject_accept <<"\n";
+
+    //io
+    content << "read_error = " << read_error <<"\n";
+    content << "send_error = " << send_error <<"\n";
+    content << "out_of_queue = " << out_of_queue <<"\n";
+    content << "queue_delay = " << queue_delay <<"\n";
+    content << "fast_reject_after_read = " << fast_reject_after_read <<"\n";
     content << "send_bytes = " << send_bytes <<"\n";
     content << "recv_bytes = " << recv_bytes <<"\n";
+    content << "waitin_queue_cost = " << waitin_queue_cost <<"\n";
+    content << "waitout_queue_cost = " << waitout_queue_cost <<"\n";
 
-   content << "request_cost = " << request_cost <<"\n";
-   content << "read_error = " << read_error <<"\n";
-   content << "send_error = " << send_error <<"\n";
-   content << "out_of_queue = " << out_of_queue <<"\n";
+    //worker
+    content << "request_qps = " << request_qps <<"\n";
+    content << "response_qps = " << response_qps <<"\n";
+    content << "request_cost_ms = " << request_cost_ms <<"\n";
+    content << "wroker_queue_timeout_count = " << wroker_queue_timeout_count <<"\n";
 
-   content << "queue_delay = " << queue_delay <<"\n";
-   content << "fast_reject_accept = " << fast_reject_accept <<"\n";
-   content << "fast_reject_read = " << fast_reject_read <<"\n";
-
-   content << "wroker_queue_timeout = " << wroker_queue_timeout <<"\n";
-   content << "waitin_queue = " << waitin_queue <<"\n";
-   content << "waitout_queue = " << waitout_queue <<"\n";
-
-   content << "svr_call = ";
+    content << "svr_call = ";
    
-   for (auto it = this->svr_call.begin(); it != this->svr_call.end(); ++it) { // calls a_map.begin() and a_map.end()
-       if (it->second > 0) {
-        content << it->first << ":" << it->second << ',';
-       }
-   }
-   content << "\n";
+    for (auto it = this->svr_call.begin(); it != this->svr_call.end(); ++it) { // calls a_map.begin() and a_map.end()
+        if (it->second > 0) {
+            content << it->first << ":" << it->second << ',';
+        }
+    }
+    content << "\n";
 
     char logPath[256];
     snprintf( logPath, sizeof( logPath ), "%s/%s", log_dir, package_name);
@@ -115,18 +118,18 @@ void ServerMonitor :: AcceptFail( int count ) {
 }
 
 void ServerMonitor :: RequestCount( int count ) {
-    if (count <= 0) {
-        return;
-    }
+    //if (count <= 0) {
+    //    return;
+    //}
 
-    this->request_cost += count;
+    this->request_qps = count;
 }
 
 void ServerMonitor :: ResponseCount( int count ) {
-    if (count <= 0) {
-        return;
-    }
-    this->response_count += count;
+    //if (count <= 0) {
+    //    return;
+    //}
+    this->response_qps = count;
 }
 
 void ServerMonitor :: SendBytes( size_t bytes ) {
@@ -147,7 +150,7 @@ void ServerMonitor :: RequestCost( uint64_t cost_ms ) {
     if (cost_ms <= 0) {
         return;
     }
-    this->request_cost += cost_ms;
+    this->request_cost_ms  = cost_ms;
 }
 
 void ServerMonitor :: ReadError( int count ) {
@@ -189,28 +192,28 @@ void ServerMonitor :: FastRejectAfterRead( int count ) {
     if (count <= 0) {
         return;
     }
-    this->fast_reject_read += count;
+    this->fast_reject_after_read += count;
 }
 
 void ServerMonitor :: WrokerInQueueTimeout( int count ) {
     if (count <= 0) {
         return;
     }
-    this->wroker_queue_timeout += count;
+    this->wroker_queue_timeout_count += count;
 }
 
 void ServerMonitor :: WaitInInQueue( uint64_t cost_ms ) {
     if (cost_ms <= 0) {
         return;
     }
-    this->waitin_queue += cost_ms;
+    this->waitin_queue_cost += cost_ms;
 }
 
 void ServerMonitor :: WaitInOutQueue( uint64_t cost_ms ) {
     if (cost_ms <= 0) {
         return;
     }
-    this->waitout_queue += cost_ms;
+    this->waitout_queue_cost += cost_ms;
 }
 
 

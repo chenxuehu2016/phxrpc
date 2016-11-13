@@ -78,19 +78,14 @@ private:
 
     void writeToFile();
 
+    //accept
     int accept;
 
     int accept_fail;
 
-    int request_count;
+    int fast_reject_accept;
 
-    int response_count;
-
-    size_t send_bytes;
-
-    size_t recv_bytes;
-
-    size_t request_cost;
+    //io
 
     int read_error;
 
@@ -98,17 +93,26 @@ private:
 
     int out_of_queue;
 
+    int fast_reject_after_read;
+
     uint64_t queue_delay;
 
-    int fast_reject_accept;
+    size_t send_bytes;
 
-    int fast_reject_read;
+    size_t recv_bytes;
 
-    int wroker_queue_timeout;
+    int waitin_queue_cost;
 
-    int waitin_queue;
+    int waitout_queue_cost;
 
-    int waitout_queue;
+    //worker
+    int request_qps;
+
+    int response_qps;
+
+    int request_cost_ms;
+
+    int wroker_queue_timeout_count;
 
     std::map<std::string, int> svr_call;
 };
