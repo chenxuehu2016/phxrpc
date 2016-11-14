@@ -55,7 +55,7 @@ ServerMonitor::ServerMonitor(const char *package_name, const char* log_dir ) :
     this->wroker_queue_timeout_count = 0;
 
     this->svr_call = {{}};
-
+}
 
 ServerMonitor :: ~ServerMonitor() {
 }

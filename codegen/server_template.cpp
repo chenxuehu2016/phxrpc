@@ -190,7 +190,7 @@ LogLevel = 3
 SocketTimeoutMS = 5000
 
 [Monitor]
-MonitorDir = /run/system
+MonitorDir = /dev/shm
 )";
 
 //////////////////////////////////////////////////////////////////////
