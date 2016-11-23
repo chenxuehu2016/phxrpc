@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--sudo apt install libxml2-utils; xmllint &#45;&#45;noout &#45;&#45;schema ./svrkit.xsd svrkit.xml-->
+<svrkit  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./svrkit.xsd">
+
+    <pkgs>
+        <pkg name="src/algorithm:algorithm"
+             cfiles="base, proposer,acceptor,learner,learner_sender,instance,ioloop,commitctx,committer,checkpoint_sender,checkpoint_receiver,msg_counter">
+            <lib>algorithm</lib>
+            <lib>src/comm:comm</lib>
+            <lib>src/logstorage:logstorage</lib>
+            <lib>src/sm-base:smbase</lib>
+            <lib>include:include</lib>
+            <lib>src/checkpoint:checkpoint</lib>
+            <lib>src/config:config</lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">src/algorithm</inc>
+            <extra-cppflags>-Wall -Werror</extra-cppflags>
+        </pkg>
+
+        <pkg name="src/communicate:communicate"  hinc="include/phxpaxos" hmvfiles="network"
+             cfiles="dfnetwork,udp,network,communicate">
+            <lib>communicate</lib>
+            <lib>src/utils:utils</lib>
+            <lib>src/comm:comm</lib>
+            <lib>src/config:config</lib>
+            <lib>include:include</lib>
+            <lib>src/communicate/tcp:communicate_tcp</lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">src/communicate</inc>
+            <extra-cppflags>-Wall -Werror</extra-cppflags>
+        </pkg>
+
+        <pkg name="src/communicate/tcp:communicate_tcp"
+             cfiles="event_base,message_event,event_loop,tcp_client,tcp_acceptor,notify,tcp">
+            <lib>communicate_tcp</lib>
+            <lib>src/utils:utils</lib>
+            <lib>include:include</lib>
+            <lib>src/comm:comm</lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">src/communicate/tcp</inc>
+            <extra-cppflags>-Wall -Werror</extra-cppflags>
+        </pkg>
+
+        <pkg name="include:include">
+            <lib></lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">include</inc>
+            <extra-cppflags>-Wall -Werror</extra-cppflags>
+        </pkg>
+
+        <pkg name=":phxpaxos" type="elib">
+            <lib>src/node:node</lib>
+            <lib>include:include</lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)"></inc>
+            <extra-cppflags>-Wall -Werror</extra-cppflags>
+        </pkg>
+    </pkgs>
+</svrkit>

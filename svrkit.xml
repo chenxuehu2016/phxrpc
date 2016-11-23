@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!--sudo apt install libxml2-utils; xmllint &#45;&#45;noout &#45;&#45;schema ./svrkit.xsd svrkit.xml-->
+<svrkit  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./svrkit.xsd">
+
+    <pkgs>
+        <pkg name="phxbinlogsvr/config:phxbinlogconfig" hinc="include/phxbinlogsvr/config"
+             cfiles="phxbinlog_svr_base_config, phxsql_config, phxbinlog_config">
+            <!--PHXBINLOGCONFIG_LIB=phxbinlogconfig phxcomm/configparser:phxconfig phxcomm/utils:phxutils include:phxcomm_include-->
+            <lib>phxbinlogconfig</lib>
+            <lib>phxcomm/configparser:phxconfig</lib>
+            <lib>phxcomm/utils:phxutils</lib>
+            <lib>include:phxcomm_include</lib>
+            <syslib></syslib>
+            <!--PHXBINLOGCONFIG_INCS=$(SRC_BASE_PATH)/phxbinlogsvr/config-->
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/config</inc>
+            <!--PHXBINLOGCONFIG_EXTRA_CPPFLAGS=-Wall-->
+            <extra-cppflags>-Wall</extra-cppflags>
+        </pkg>
+
+        <pkg name="phxbinlogsvr/core/agent:agent" cfiles="agent, agent_manager, data_manager">
+            <lib>agent</lib>
+            <lib>phxcomm/log/phxlog:phxlog</lib>
+            <lib>phxbinlogsvr/config:phxbinlogconfig</lib>
+            <lib>phxbinlogsvr/core/monitor:agentmonitor</lib>
+            <lib>phxbinlogsvr/core/paxos:eventagent</lib>
+            <lib>phxbinlogsvr/core/paxos:masteragent</lib>
+            <lib>phxbinlogsvr/core/repl:agentrepl</lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/core/agent</inc>
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/core</inc>
+            <extra-cppflags>-Wall -Werror</extra-cppflags>
+        </pkg>
+
+        <pkg name="phxbinlogsvr/framework/phxrpc/client:phxbinlogsvrclient_phxrpc"
+             type="elib" phxrpc="client"
+             proto="phxbinlogsvr/framework/proto/phxbinlogsvr.proto">
+            <lib>phxbinlogsvrclient_phxrpc</lib>
+            <lib>phxbinlogsvr/framework/rpccomm:phxbinlogsvrclient_base</lib>
+            <lib>phxbinlogsvr/framework/proto:clientproto</lib>
+            <lib>phxbinlogsvr/core/mysql:gtidhandler</lib>
+            <lib>include:phxcomm_include</lib>
+            <syslib prefix="$(PHXRPC_LIB_PATH)">libphxrpc.a</syslib>
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/phxrpc/client</inc>
+            <inc prefix="$(PHXRPC_INCLUDE_PATH)"></inc>
+            <extra-cppflags>-Wall</extra-cppflags>
+            <vpath prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/proto</vpath>
+        </pkg>
+
+        <pkg name="phxbinlogsvr/framework/phxrpc/svr:phxbinlogsvr_phxrpc"
+             type="bin" phxrpc="svr"
+             proto="phxbinlogsvr/framework/proto/phxbinlogsvr.proto">
+            <lib>phxbinlogsvr/framework/phxrpc/client:phxbinlogsvrclient_phxrpc</lib>
+            <lib>phxbinlogsvr/framework/rpccomm:phxbinlogsvrlogic</lib>
+            <lib>phxcomm/log/phxglog:phxglog</lib>
+            <syslib prefix="$(PHXRPC_LIB_PATH)">libphxrpc.a</syslib>
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/phxrpc/svr</inc>
+            <inc prefix="$(PHXRPC_INCLUDE_PATH)"></inc>
+            <extra-cppflags>-Wall</extra-cppflags>
+            <vpath prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/proto</vpath>
+        </pkg>
+
+        <pkg name="phxbinlogsvr/framework/phxrpc/tools:phxbinlogsvr_tools_phxrpc"
+             type="bin" phxrpc="tools"
+             proto="phxbinlogsvr/framework/proto/phxbinlogsvr.proto">
+            <lib>phxbinlogsvr/framework/phxrpc/client:phxbinlogsvrclient_phxrpc</lib>
+            <syslib prefix="$(PHXRPC_LIB_PATH)">libphxrpc.a</syslib>
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/phxrpc/tools</inc>
+            <inc prefix="$(PHXRPC_INCLUDE_PATH)"></inc>
+            <extra-cppflags>-Wall</extra-cppflags>
+            <vpath prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/proto</vpath>
+        </pkg>
+
+        <pkg name="phxbinlogsvr/framework/proto:clientproto" phxrpc="protobuf"
+             proto="phxbinlogsvr/framework/proto/phxbinlogsvr.proto">
+            <lib>clientproto</lib>
+            <syslib prefix="$(PROTOBUF_LIB_PATH)">libprotobuf.a</syslib>
+            <inc prefix="$(SRC_BASE_PATH)">phxbinlogsvr/framework/proto</inc>
+            <inc prefix="$(PROTOBUF_INCLUDE_PATH)"></inc>
+            <extra-cppflags>-Wall</extra-cppflags>
+        </pkg>
+
+        <src-list name="phxbinlogsvr">
+            <dir>proto</dir>
+            <dir>config</dir>
+            <dir>core</dir>
+            <dir>framework</dir>
+        </src-list>
+
+        <pkg name="include:phxcomm_include"
+             type="elib">
+            <lib></lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">include</inc>
+            <extra-cppflags>-Wall</extra-cppflags>
+        </pkg>
+
+        <pkg name="include/phxbinlogsvr:phxbinlogsvr_include"
+             type="elib">
+            <lib></lib>
+            <syslib></syslib>
+            <inc prefix="$(SRC_BASE_PATH)">include/phxbinlogsvr</inc>
+            <extra-cppflags>-Wall</extra-cppflags>
+        </pkg>
+
+    </pkgs>
+</svrkit>

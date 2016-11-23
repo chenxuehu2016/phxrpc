@@ -1,0 +1,94 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="svrkit">
+        <xs:annotation>
+            <xs:documentation>sudo apt install libxml2-utils; xmllint &amp;amp;#45;&amp;amp;#45;noout &amp;amp;#45;&amp;amp;#45;schema ../schema.xsd phxbinlogsvr.xml</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="pkgs">
+                    <xs:complexType>
+                        <xs:choice maxOccurs="unbounded" minOccurs="0">
+                            <xs:element name="pkg" maxOccurs="unbounded" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>vpath %.proto $(SRC_BASE_PATH)/phxbinlogsvr/framework/protophxrpc_phxbinlog_stub.cpp:phxbinlogsvr.proto$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2client -f phxbinlogsvr.proto -I $(SRC_BASE_PATH)/phxbinlogsvr/framework/proto/ -I $(PROTOBUF_INCLUDE_PATH) -d .vpath %.proto $(SRC_BASE_PATH)/phxbinlogsvr/framework/protophxrpc_phxbinlog_dispatcher.cpp:phxbinlogsvr.proto$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f phxbinlogsvr.proto -I $(SRC_BASE_PATH)/phxbinlogsvr/framework/proto/ -I $(PROTOBUF_INCLUDE_PATH) -d .phxrpc_phxbinlog_service.cpp:phxbinlogsvr.proto$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f phxbinlogsvr.proto -I $(SRC_BASE_PATH)/phxbinlogsvr/framework/proto/ -I $(PROTOBUF_INCLUDE_PATH) -d .vpath %.proto $(SRC_BASE_PATH)/phxbinlogsvr/framework/protophxrpc_phxbinlog_tool.cpp:phxbinlogsvr.proto$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2tool -f phxbinlogsvr.proto -I $(SRC_BASE_PATH)/phxbinlogsvr/framework/proto/ -I $(PROTOBUF_INCLUDE_PATH) -d .</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="lib" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>PHXBINLOGCONFIG_LIB=phxbinlogconfig phxcomm/configparser:phxconfig phxcomm/utils:phxutils include:phxcomm_include</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="syslib">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute type="xs:string" name="prefix" use="optional"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="inc" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:annotation>
+                                                <xs:documentation>PHXBINLOGCONFIG_INCS=$(SRC_BASE_PATH)/phxbinlogsvr/config</xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute type="xs:string" name="prefix" use="optional"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element type="xs:string" name="extra-cppflags">
+                                            <xs:annotation>
+                                                <xs:documentation>PHXBINLOGCONFIG_EXTRA_CPPFLAGS=-Wall</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="vpath" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute type="xs:string" name="prefix" use="optional"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:string" name="name" use="optional"/>
+                                    <xs:attribute type="xs:string" name="hinc" use="optional"/>
+                                    <xs:attribute type="xs:string" name="cfiles" use="optional"/>
+                                    <xs:attribute type="xs:string" name="type" use="optional"/>
+                                    <xs:attribute type="xs:string" name="phxrpc" use="optional"/>
+                                    <xs:attribute type="xs:string" name="proto" use="optional"/>
+                                    <xs:attribute type="xs:string" name="hmvfiles" use="optional" />
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="src-list">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element type="xs:string" name="dir" maxOccurs="unbounded" minOccurs="0"/>
+                                        <xs:element type="xs:string" name="lib" minOccurs="0"/>
+                                        <xs:element type="xs:string" name="syslib" minOccurs="0"/>
+                                        <xs:element name="inc" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:simpleContent>
+                                                    <xs:extension base="xs:string">
+                                                        <xs:attribute type="xs:string" name="prefix" use="optional"/>
+                                                    </xs:extension>
+                                                </xs:simpleContent>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element type="xs:string" name="extra-cppflags" minOccurs="0"/>
+                                    </xs:sequence>
+                                    <xs:attribute type="xs:string" name="name" use="optional"/>
+                                    <xs:attribute type="xs:string" name="type" use="optional"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
