@@ -202,7 +202,10 @@ string GetTextPrefix(const XMLElement *parent) {
 	if (0 == text) {
 		return str;
 	}
-	str.append("/");
+
+	if (0 != prefix) {
+		str.append("/");
+	}
 	str.append(text);
 	return str;
 }
@@ -438,7 +441,7 @@ void GenerateSrcList(char *program, const XMLElement *element, FILE *write) {
 		dirs.append(" ");
 	}
 
-	fprintf(write, "%s\n", dirs);
+	fprintf(write, "%s\n", dirs.c_str());
 }
 
 int src_list(char *program, const XMLElement *element, const char* base_dir) {
@@ -454,19 +457,19 @@ int src_list(char *program, const XMLElement *element, const char* base_dir) {
 	const char *filename = src_list.c_str();
 	const string &mk_dir = getMkDefFileDir(base_dir, name);
 
-	if (0 != access(filename, F_OK)) {
-		FILE *fp = fopen(filename, "w");
-		if (NULL == fp) {
-			_mkdir(mk_dir.c_str());
-			fp = fopen(filename, "w");
-		}
-		GenerateSrcList(program, element, fp);
-		fclose(fp);
-		printf("\n%s: element %s to %s file ... done\n", program,  name, filename);
-		count = 1;
-	} else {
-		printf("\n%s: element %s to %s is exist\n", program, name, filename);
+	//	if (0 != access(filename, F_OK)) {
+	FILE *fp = fopen(filename, "w");
+	if (NULL == fp) {
+		_mkdir(mk_dir.c_str());
+		fp = fopen(filename, "w");
 	}
+	GenerateSrcList(program, element, fp);
+	fclose(fp);
+	printf("\n%s: element %s to %s file ... done\n", program,  name, filename);
+	count = 1;
+	//	} else {
+	//		printf("\n%s: element %s to %s is exist\n", program, name, filename);
+	//	}
 
 	return count;
 }
