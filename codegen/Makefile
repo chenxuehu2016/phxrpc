@@ -9,7 +9,7 @@ TEST_TARGETS = test_proto_utils
 
 all: $(TARGETS) $(TEST_TARGETS)
 
-phxrpc_xml2proto: phxrpc_xml2proto.o
+phxrpc_xml2proto: phxrpc_xml2proto.o xml_proto_render.o
 	$(LINKER) $^ $(LDFLAGS) -o $@
 
 phxrpc_pb2service: $(COMM_OBJS) service_code_render.o phxrpc_pb2service.o
@@ -24,7 +24,7 @@ phxrpc_pb2tool: $(COMM_OBJS) tool_code_render.o tool_template.o phxrpc_pb2tool.o
 phxrpc_pb2server: $(COMM_OBJS) server_code_render.o server_template.o phxrpc_pb2server.o
 	$(LINKER) $^ $(LDFLAGS) -o $@
 
-svrkit_xml2mkdefine: $(COMM_OBJS) svrkit_xml2mkdefine.o
+svrkit_xml2mkdefine: $(COMM_OBJS) svrkit_template.o svrkit_code_render.o svrkit_xml2mkdefine.o xml_proto_render.o
 	$(LINKER) $^ $(LDFLAGS) -o $@
 
 test_proto_utils: test_proto_utils.o syntax_tree.o proto_utils.o

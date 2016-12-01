@@ -213,5 +213,6 @@ cd tmp
 ```
 ## 生成Makefile
 ```
-./tools/create_makefile.py .
+#./tools/create_makefile.py .
+./autoinstall.sh .
 ```

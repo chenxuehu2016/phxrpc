@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+ <!--sudo apt install libxml2-utils; xmllint &#45;&#45;noout &#45;&#45;schema ../schema.xsd phxbinlogsvr.xml -->
+<phxrpc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="./schema.xsd">
+    <package>phxbinlogsvr</package>
+    <message name="BinLogBuffer">
+        <field type="string" name="oldgtid">1</field>
+        <field type="string" name="newgtid">2</field>
+        <field type="bytes" name="eventbuffer">3</field>
+    </message>
+    <message name="BinLogResp">
+        <field type="int32" repeated="true" name="section">1</field>
+        <field type="bytes" name="respbuffer">2</field>
+    </message>
+    <message name="MasterInfo">
+        <field type="string" name="ip">1</field>
+        <field type="uint32" name="expire_time">2</field>
+        <field type="uint32" name="version">3</field>
+        <field type="uint32" name="update_time">4</field>
+    </message>
+    <message name="ExportIPInfo">
+        <field type="string" name="ip">1</field>
+        <field type="uint32" name="port">2</field>
+    </message>
+    <message name="HeartBeatInfo">
+        <field type="uint32" name="flag">1</field>
+    </message>
+    <message name="ChangeMemberInfo">
+        <field type="string" name="ip">1</field>
+    </message>
+    <message name="MySqlUserModefiedInfo">
+        <field type="string" name="now_admin_username">1</field>
+        <field type="string" name="now_admin_pwd">2</field>
+
+        <field type="string" name="new_username">3</field>
+        <field type="string" name="new_pwd">4</field>
+    </message>
+    <message name="MemberList">
+        <field type="string" name="ip_list" repeated="true">1</field>
+        <field type="uint32" name="port">2</field>
+    </message>
+    <enum name="Cmd">
+        <value name="send_binlog">0</value>
+        <value name="get_lastsend_gtid_fromg_global">2</value>
+        <value name="get_masterinfo_fromg_global">4</value>
+    </enum>
+    <imports>
+        <import>google/protobuf/wrappers.proto</import>
+        <import>google/protobuf/empty.proto</import>
+        <import>phxrpc/rpc/phxrpc.proto</import>
+    </imports>
+    <service name="phxbinlog">
+        <rpc name="SendBinLog" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>1</cmdID>
+            <optString>e:</optString>
+            <usage>-e &lt;emtpy&gt;</usage>
+        </rpc>
+        <rpc name="GetMasterInfoFromGlobal" paramter="google.protobuf.Empty" returns="google.protobuf.BytesValue">
+            <cmdID>2</cmdID>
+            <optString>h:p:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt;</usage>
+        </rpc>
+        <rpc name="GetMasterInfoFromLocal" paramter="google.protobuf.Empty" returns="google.protobuf.BytesValue">
+            <cmdID>3</cmdID>
+            <optString>e:</optString>
+            <usage>-e &lt;emtpy&gt;</usage>
+        </rpc>
+        <rpc name="GetLastSendGtidFromGlobal" paramter="google.protobuf.BytesValue" returns="google.protobuf.BytesValue">
+            <cmdID>4</cmdID>
+            <optString>h:p:u:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt; -u &lt;gtid&gt;</usage>
+        </rpc>
+        <rpc name="GetLastSendGtidFromLocal" paramter="google.protobuf.BytesValue" returns="google.protobuf.BytesValue">
+            <cmdID>5</cmdID>
+            <optString>e:</optString>
+            <usage>-e &lt;emtpy&gt;</usage>
+        </rpc>
+        <rpc name="SetExportIP" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>6</cmdID>
+            <optString>h:p:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt;</usage>
+        </rpc>
+        <rpc name="HeartBeat" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>7</cmdID>
+            <optString>e:</optString>
+            <usage>-e &lt;emtpy&gt;</usage>
+        </rpc>
+        <rpc name="AddMember" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>8</cmdID>
+            <optString>h:p:m:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt; -m &lt;member ip&gt;</usage>
+        </rpc>
+        <rpc name="RemoveMember" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>9</cmdID>
+            <optString>h:p:m:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt; -m &lt;member ip&gt;</usage>
+        </rpc>
+        <rpc name="SetMySqlAdminInfo" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>10</cmdID>
+            <optString>h:p:u:d:U:D:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt; -u &lt;admin username&gt; -d &lt;admin pwd&gt; -U &lt;new admin username&gt; -D &lt;new admin pwd&gt;</usage>
+        </rpc>
+        <rpc name="SetMySqlReplicaInfo" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>11</cmdID>
+            <optString>h:p:u:d:U:D:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt; -u &lt;admin username&gt; -d &lt;admin pwd&gt; -U &lt;new replica username&gt; -D &lt;new replica pwd&gt;</usage>
+        </rpc>
+        <rpc name="GetMemberList" paramter="google.protobuf.Empty" returns="google.protobuf.BytesValue">
+            <cmdID>12</cmdID>
+            <optString>h:p:</optString>
+            <usage>-h &lt;host&gt; -p &lt;port&gt;</usage>
+        </rpc>
+        <rpc name="InitBinlogSvrMaster" paramter="google.protobuf.BytesValue" returns="google.protobuf.Empty">
+            <cmdID>13</cmdID>
+            <optString>h:p:</optString>
+            <usage>-h &lt;ip1,ip2,ip3(ip1 is master, others are slaves)&gt; -p &lt;port&gt;</usage>
+        </rpc>
+    </service>
+</phxrpc>
