@@ -39,14 +39,19 @@ SvrKitCodeRender::~SvrKitCodeRender() {
 
 string SvrKitCodeRender::GetPhxrpcClientVpath(const char* pbname, const std::string & pbpath, const std::string & pbfile) {
 	std::string buffer;
-	char stub_file[128] = { 0 };
+	char stub_file[128] = { 0 }, client_file[128] = { 0 };
 
 	name_render_.GetStubFileName(pbname, stub_file, sizeof(stub_file));
+	name_render_.GetClientFileName(pbname, client_file, sizeof(client_file));
 
 	std::string content(SVRKIT_CLIENT_MAKEFILE_DEFINE_TEMPLATE);
 	StrTrim(&content);
-	StrReplaceAll(&content, "$StubFile$", stub_file);
+
 	StrReplaceAll(&content, "$ProtoPath$", pbpath);
+	StrReplaceAll(&content, "$ProtoFile$", pbfile);
+
+	StrReplaceAll(&content, "$StubFile$", stub_file);
+	StrReplaceAll(&content, "$ClientFile$", client_file);
 	StrReplaceAll(&content, "$ProtoFile$", pbfile);
 
 	return content;
@@ -54,33 +59,46 @@ string SvrKitCodeRender::GetPhxrpcClientVpath(const char* pbname, const std::str
 
 string SvrKitCodeRender::GetPhxrpcServerVpath(const char* pbname, const std::string & pbpath, const std::string & pbfile) {
 	std::string buffer;
-	char dispatcher_file[128] = { 0 }, service_file[128] = { 0 };
+	char dispatcher_file[128] = { 0 }, service_file[128] = { 0 }, server_handler_file[128] = { 0 }, service_impl_file[128] = { 0 };
+	char server_config_file[128] = { 0 }, server_main_file[128] = { 0 };
 
 	name_render_.GetDispatcherFileName(pbname, dispatcher_file, sizeof(dispatcher_file));
 	name_render_.GetServiceFileName(pbname, service_file, sizeof(service_file));
+	name_render_.GetServerHandlerFileName(pbname, server_handler_file, sizeof(server_handler_file));
+	name_render_.GetServiceImplFileName(pbname, service_impl_file, sizeof(service_impl_file));
+
+	name_render_.GetServerConfigFileName(pbname, server_config_file, sizeof(server_config_file));
+	name_render_.GetServerMainFileName(pbname, server_main_file, sizeof(server_main_file));
 
 	std::string content(SVRKIT_SERVER_MAKEFILE_DEFINE_TEMPLATE);
 	StrTrim(&content);
-	StrReplaceAll(&content, "$DispatcherFile$", dispatcher_file);
-	StrReplaceAll(&content, "$ServiceFile$", service_file);
 	StrReplaceAll(&content, "$ProtoPath$", pbpath);
 	StrReplaceAll(&content, "$ProtoFile$", pbfile);
+	StrReplaceAll(&content, "$DispatcherFile$", dispatcher_file);
+	StrReplaceAll(&content, "$ServiceFile$", service_file);
+	StrReplaceAll(&content, "$ServerHandlerFile$", server_handler_file);
+	StrReplaceAll(&content, "$ServiceImplFile$", service_impl_file);
+	StrReplaceAll(&content, "$ServerConfigFile$", server_config_file);
+	StrReplaceAll(&content, "$ServerMainFile$", server_main_file);
 
 	return content;
 }
 
 string SvrKitCodeRender::GetPhxrpcToolsVpath(const char* pbname, const std::string & pbpath, const std::string & pbfile) {
 	std::string buffer;
-	char tool_file[128] = { 0 };
+	char tool_file[128] = { 0 }, tool_impl_file[128] = { 0 }, tool_main_file[128] = { 0 };
 
+	name_render_.GetToolImplFileName(pbname, tool_impl_file, sizeof(tool_impl_file));
 	name_render_.GetToolFileName(pbname, tool_file, sizeof(tool_file));
+	name_render_.GetToolMainFileName(pbname, tool_main_file, sizeof(tool_main_file));
 
 	std::string content(SVRKIT_TOOLS_MAKEFILE_DEFINE_TEMPLATE);
 	StrTrim(&content);
-	StrReplaceAll(&content, "$ToolFile$", tool_file);
 	StrReplaceAll(&content, "$ProtoPath$", pbpath);
 	StrReplaceAll(&content, "$ProtoFile$", pbfile);
-
+	StrReplaceAll(&content, "$ToolFile$", tool_file);
+	StrReplaceAll(&content, "$ToolImplFile$", tool_impl_file);
+	StrReplaceAll(&content, "$ToolMainFile$", tool_main_file);
 	return content;
 }
 
@@ -93,7 +111,7 @@ std::string SvrKitCodeRender::GetPhxrpcClientObjs(const char *pbname, const std:
 	char stub_file[128] = { 0 }, client_file[128] = { 0 };
 
 	name_render_.GetStubFileName(pbname, stub_file, sizeof(stub_file));
-	name_render_.GetToolFileName(pbname, client_file, sizeof(client_file));
+	name_render_.GetClientFileName(pbname, client_file, sizeof(client_file));
 
 	std::string content = "$StubFile$.o $ClientFile$.o";
 
@@ -120,7 +138,7 @@ std::string SvrKitCodeRender::GetPhxrpcServerObjs(const char *pbname, const std:
 	name_render_.GetServerConfigFileName(pbname, server_config_file, sizeof(server_config_file));
 	name_render_.GetServerMainFileName(pbname, server_main_file, sizeof(server_main_file));
 
-	std::string content = R"($ServerHandlerFile$.o  $ServiceImplFile$.o $ServiceFile$.o $DispatcherFile$.o $ServerConfigFile$.o $ServerMainFile$.o)";
+	std::string content = R"( $ServerConfigFile$.o $ServerMainFile$.o $ServerHandlerFile$.o  $ServiceImplFile$.o $ServiceFile$.o $DispatcherFile$.o)";
 
 	StrReplaceAll(&content, "$DispatcherFile$", dispatcher_file);
 	StrReplaceAll(&content, "$ServiceFile$", service_file);

@@ -24,7 +24,7 @@ const char * SVRKIT_CLIENT_MAKEFILE_DEFINE_TEMPLATE =
 R"(
 vpath %.proto $(SRC_BASE_PATH)/$ProtoPath$
 $StubFile$.cpp: $ProtoFile$
-	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2client -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I $(PROTOBUF_INCLUDE_PATH) -d .
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2client -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
 )";
 //$StubFile$.h: $ProtoFile$
 //$(PHXRPC_ROOT)/codegen/phxrpc_pb2client $(PBFLAGS) -f $^ -d .
@@ -32,12 +32,19 @@ $StubFile$.cpp: $ProtoFile$
 const char * SVRKIT_SERVER_MAKEFILE_DEFINE_TEMPLATE =
 R"(
 vpath %.proto $(SRC_BASE_PATH)/$ProtoPath$
+$ServiceImplFile$.cpp: $ProtoFile$
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
+$ServerHandlerFile$.cpp: $ProtoFile$
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
 $DispatcherFile$.cpp: $ProtoFile$
-	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I $(PROTOBUF_INCLUDE_PATH) -d .
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
 $ServiceFile$.cpp: $ProtoFile$
-	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I $(PROTOBUF_INCLUDE_PATH) -d .
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2service -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
+$ServerConfigFile$.cpp: $ProtoFile$
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2server -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
+$ServerMainFile$.cpp: $ProtoFile$
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2server -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
 )";
-
 //$ServiceFile$.h: $ProtoFile$
 //$(PHXRPC_ROOT)/codegen/phxrpc_pb2service $(PBFLAGS) -f $^ -d .
 
@@ -45,7 +52,11 @@ const char * SVRKIT_TOOLS_MAKEFILE_DEFINE_TEMPLATE =
 R"(
 vpath %.proto $(SRC_BASE_PATH)/$ProtoPath$
 $ToolFile$.cpp: $ProtoFile$
-	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2tool -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I $(PROTOBUF_INCLUDE_PATH) -d .
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2tool -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
+$ToolImplFile$.cpp: $ProtoFile$
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2tool -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
+$ToolMainFile$.cpp: $ProtoFile$
+	$(PHXRPC_INCLUDE_PATH)/codegen/phxrpc_pb2tool -f $ProtoFile$ -I $(SRC_BASE_PATH)/$ProtoPath$/ -I${PHXRPC_INCLUDE_PATH} -I $(PROTOBUF_INCLUDE_PATH) -d .
 )";
 
 /*
