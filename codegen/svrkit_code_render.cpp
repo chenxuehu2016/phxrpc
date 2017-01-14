@@ -138,7 +138,7 @@ std::string SvrKitCodeRender::GetPhxrpcServerObjs(const char *pbname, const std:
 	name_render_.GetServerConfigFileName(pbname, server_config_file, sizeof(server_config_file));
 	name_render_.GetServerMainFileName(pbname, server_main_file, sizeof(server_main_file));
 
-	std::string content = R"( $ServerConfigFile$.o $ServerMainFile$.o $ServerHandlerFile$.o  $ServiceImplFile$.o $ServiceFile$.o $DispatcherFile$.o)";
+	std::string content = R"( $ServerConfigFile$.o $ServerHandlerFile$.o  $ServiceImplFile$.o $ServiceFile$.o $DispatcherFile$.o $ServerMainFile$.o )";
 
 	StrReplaceAll(&content, "$DispatcherFile$", dispatcher_file);
 	StrReplaceAll(&content, "$ServiceFile$", service_file);
